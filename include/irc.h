@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/03 15:35:45 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/30 13:24:53 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/09/30 13:43:16 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <dirent.h>
 # include "libft.h"
 
+# include <stdio.h>
 # include <sys/select.h>
 
 # define BUF_SIZE 4096
@@ -54,12 +55,19 @@ typedef struct		s_strbuf
 
 typedef struct		s_server
 {
+	int				listen;
 	fd_set			active;
 	fd_set			read;
 	fd_set			write;
 	int				max;
-	t_strbuf		**buf;
+	t_strbuf		*buf;
 }					t_server;
+
+t_server			*server(void);
+void				server_init(void);
+void				server_set(int sock);
+void				server_select(void);
+
 
 void				pexit(char *str, int outno);
 int					perr(char *str);

@@ -6,7 +6,7 @@
 #    By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/20 16:35:37 by tgauvrit          #+#    #+#              #
-#    Updated: 2016/09/30 10:41:51 by tgauvrit         ###   ########.fr        #
+#    Updated: 2016/09/30 13:39:12 by tgauvrit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ OBJ_DIR_NAME =	obj
 OBJ_DIR =		./obj/
 
 SHARED_FILES =	print get_dir strjoinfree readn palloc
-FILENAMES1 :=	server_main
+FILENAMES1 :=	server_main server_select server_init
 FILENAMES2 :=	client_main client_connect client_prompt client_send
 
 OBJ_PATHS1 :=	$(addsuffix .o,$(SHARED_FILES) $(FILENAMES1))

@@ -6,39 +6,16 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 12:00:15 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/30 13:24:26 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/09/30 13:43:37 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.h"
 
-t_server	*server(void)
-{
-	static t_server	save;
-
-	return (&save);
-}
-
-void	server_init(void)
-{
-	int	i;
-
-	FD_ZERO(SERVER_ACTIVE);
-	server()->max = -1;
-	server()->buf = palloc(sizeof(t_strbuf) * fd_limit());
-	i = 0;
-	while (i < fd_limit())
-	{
-		server()->buf[i++].read = ft_strnew(0);
-		server()->buf[i++].write = ft_strnew(0);
-		server()->buf[i++].set = 0;
-	}
-}
-
 void	server_set(int sock)
 {
-	server()->buf[sock].read = ft_strfresh(server()->buf[sock].read);
-	server()->buf[sock].write = ft_strfresh(server()->buf[sock].write);
+	server()->buf[sock].read = strfresh(server()->buf[sock].read);
+	server()->buf[sock].write = strfresh(server()->buf[sock].write);
 	server()->buf[sock].set = 1;
 	FD_SET(sock, SERVER_ACTIVE);
 	if (sock > server()->max)
@@ -49,8 +26,8 @@ void	server_clr(int sock)
 {
 	int	i;
 
-	server()->buf[sock].read = ft_strfresh(server()->buf[sock].read);
-	server()->buf[sock].write = ft_strfresh(server()->buf[sock].write);
+	server()->buf[sock].read = strfresh(server()->buf[sock].read);
+	server()->buf[sock].write = strfresh(server()->buf[sock].write);
 	server()->buf[sock].set = 0;
 	FD_CLR(sock, SERVER_ACTIVE);
 	if (sock == server()->max)
@@ -72,12 +49,12 @@ void	server_accept(void)
 	t_sockaddr_in	addr;
 	socklen_t		size;
 
-	if (!FD_ISSET(server()->sock, SERVER_READ))
+	if (!FD_ISSET(server()->listen, SERVER_READ))
 		return ;
 	size = sizeof(t_sockaddr_in);
-	new_sock = accept(sock, &addr, &size);
-	printf("Server: connect from host %s, port %hd.\n",
-		inet_ntoa(clientname.sin_addr), ntohs(clientname.sin_port));
+	new_sock = accept(server()->listen, &addr, &size);
+	printf("Server: connection from host %s, port %hd.\n",
+		inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
 	server_set(new_sock);
 }
 
@@ -110,12 +87,12 @@ void	server_select(void)
 	i = 0;
 	while (i <= server()->max)
 	{
-		if (i != server()->sock && FD_ISSET(i, SERVER_READ))
+		if (i != server()->listen && FD_ISSET(i, SERVER_READ))
 			server_read(i);
-		if (i != server()->sock && FD_ISSET(i, SERVER_WRITE))
+		if (i != server()->listen && FD_ISSET(i, SERVER_WRITE))
 		{
 			send(i, server()->buf[i].write, strlen(server()->buf[i].write), 0);
-			server()->buf[i].write = ft_strfresh(server()->buf[i].write);
+			server()->buf[i].write = strfresh(server()->buf[i].write);
 		}
 		++i;
 	}
