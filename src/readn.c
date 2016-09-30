@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/29 12:11:47 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/29 17:57:01 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/09/30 10:42:06 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ static char		*strupgrade(char *str, size_t buffer)
 
 	if (str == NULL)
 		return (ft_strnew(buffer + 1));
-	new = malloc((quicklen(str) + buffer + 1) * sizeof(char));
-	if (new == NULL)
-		pexit("Malloc failed.\n", 1);
+	new = palloc((quicklen(str) + buffer + 1) * sizeof(char));
 	str_tmp = str;
 	tmp = new;
 	while (*str_tmp != 0)

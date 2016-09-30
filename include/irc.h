@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/03 15:35:45 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/29 17:30:01 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/09/30 13:24:53 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define IRC_H
 
 # include <stdlib.h>
+# include <string.h>
 # include <unistd.h>
 # include <sys/param.h>
 # include <stdint.h>
@@ -30,7 +31,11 @@
 
 # include <sys/select.h>
 
-# define BUF_SIZE 256
+# define BUF_SIZE 4096
+
+# define SERVER_ACTIVE ((fd_set*)server())
+# define SERVER_READ ((fd_set*)server() + 1)
+# define SERVER_WRITE ((fd_set*)server() + 2)
 
 typedef struct sockaddr_in	t_sockaddr_in;
 
@@ -40,22 +45,42 @@ typedef struct		s_sock_data
 	t_sockaddr_in	addr;
 }					t_sock_data;
 
+typedef struct		s_strbuf
+{
+	int				set;
+	char			*read;
+	char			*write;
+}					t_strbuf;
+
+typedef struct		s_server
+{
+	fd_set			active;
+	fd_set			read;
+	fd_set			write;
+	int				max;
+	t_strbuf		**buf;
+}					t_server;
+
+void				pexit(char *str, int outno);
+int					perr(char *str);
+
+void				*palloc(size_t size);
+
+int					fd_limit(void);
+
+char				*strjoinfree(char *s1, char *s2);
+char				*strfresh(char *str);
+
 void				client_prompt(t_sock_data *sock);
 t_sock_data			*prompt_connect_only(t_sock_data *sock);
 void				client_send(t_sock_data *sock, char *input);
 t_sock_data			*c_connect(char *hostname, char *port);
 int					c_disconnect(t_sock_data *sock);
 int					c_reconnect(t_sock_data *sock, char *hostname, char *port);
-
 char				*readn(int fd);
-
-char				*strjoinfree(char *s1, char *s2);
 
 char				*get_root(void);
 char				*get_dir(void);
 char				*basename(char *str);
-
-void				pexit(char *str, int outno);
-int					perr(char *str);
 
 #endif

@@ -1,43 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strjoinfree.c                                      :+:      :+:    :+:   */
+/*   fd_limit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/09/29 11:41:19 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/30 12:15:28 by tgauvrit         ###   ########.fr       */
+/*   Created: 2016/09/30 11:01:15 by tgauvrit          #+#    #+#             */
+/*   Updated: 2016/09/30 11:12:46 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.h"
 
-char	*strfresh(char *str)
+int		fd_limit(void)
 {
-	free(str);
-	return (ft_strnew(0));
-}
+	static int		saved = -42;
+	struct rlimit	limits;
 
-char	*strjoinfree(char *s1, char *s2)
-{
-	char	*new;
-	char 	*tmp;
-
-	new = palloc((strlen(s1) + strlen(s2) + 1) * sizeof(char));
-	tmp = new;
-	while (*s1 != 0)
-	{
-		*tmp = *s1;
-		++tmp;
-		++s1;
-	}
-	while (*s2 != 0)
-	{
-		*tmp = *s2;
-		++tmp;
-		++s2;
-	}
-	*tmp = 0;
-	free(s1);
-	return (new);
+	if (saved != -42)
+		return (saved);
+	if (getrlimit(RLIMIT_NOFILE, &limits) < 0)
+		pexit("getrlimits failed.\n", 1);
+	saved = limits.rlim_cur;
+	return (saved);
 }
