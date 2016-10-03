@@ -6,14 +6,55 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/14 13:37:09 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/30 14:18:19 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/10/03 15:16:31 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.h"
 
-void	server_do(void)
+char	*strcutline(char *str)
 {
+	char	*tmp;
+
+	tmp = ft_strchr(str, '\n');
+	if (tmp == NULL)
+		return (str);
+	tmp = ft_strdup(tmp + 1);
+	free(str);
+	return (tmp);
+}
+
+void	server_do(t_clientbuf *client)
+{
+	char	*tmp;
+
+	while ((tmp = ft_strchr(client->read, '\n')) != NULL)
+	{
+		ft_putstr("ServerDo: Socket ");
+		ft_putnbr(client->sock);
+		ft_putstr(": line found.\n");
+		*tmp = 0;
+		// if (client->read[0] == '/')
+		// 	server_cmd(client);
+		// else
+		// 	channels_write(client);
+		client->write = strjoinfree(client->write, client->read);
+		*tmp = '\n';
+		client->read = strcutline(client->read);
+	}
+}
+
+void	server_do_all(void)
+{
+	int	i;
+
+	i = 0;
+	while (i <= server()->max)
+	{
+		if (server()->buf[i].set == 1)
+			server_do(server()->buf + i);
+		++i;
+	}
 }
 
 int		main(int argc, char *argv[])
@@ -34,13 +75,12 @@ int		main(int argc, char *argv[])
 		inet_ntoa(sock.addr.sin_addr), ntohs(sock.addr.sin_port));
 	if (listen(sock.id, 5) == -1)
 		pexit("Error: server listen failed\n", 1);
-	server_init();
-	server_set(sock.id);
-	server()->listen = sock.id;
+	printf("Listen worked.\n");
+	server_init(sock.id);
 	while (42)
 	{
 		server_select();
-		server_do();
+		server_do_all();
 	}
 	return (0);
 }

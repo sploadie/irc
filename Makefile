@@ -6,7 +6,7 @@
 #    By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/20 16:35:37 by tgauvrit          #+#    #+#              #
-#    Updated: 2016/09/30 13:39:12 by tgauvrit         ###   ########.fr        #
+#    Updated: 2016/10/03 14:49:53 by tgauvrit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ SRC_DIR =		./src/
 OBJ_DIR_NAME =	obj
 OBJ_DIR =		./obj/
 
-SHARED_FILES =	print get_dir strjoinfree readn palloc
+SHARED_FILES =	print get_dir strjoinfree readn palloc fd_limit
 FILENAMES1 :=	server_main server_select server_init
 FILENAMES2 :=	client_main client_connect client_prompt client_send
 

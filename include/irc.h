@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/03 15:35:45 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/30 13:43:16 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/10/03 13:04:06 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,28 +46,30 @@ typedef struct		s_sock_data
 	t_sockaddr_in	addr;
 }					t_sock_data;
 
-typedef struct		s_strbuf
+typedef struct		s_clientbuf
 {
 	int				set;
+	int				sock;
+	char			*nick;
 	char			*read;
 	char			*write;
-}					t_strbuf;
+}					t_clientbuf;
 
 typedef struct		s_server
 {
-	int				listen;
 	fd_set			active;
 	fd_set			read;
 	fd_set			write;
+	int				listen;
 	int				max;
-	t_strbuf		*buf;
+	t_clientbuf		*buf;
 }					t_server;
 
 t_server			*server(void);
-void				server_init(void);
+void				server_init(int sock);
 void				server_set(int sock);
 void				server_select(void);
-
+void				server_accept(void);
 
 void				pexit(char *str, int outno);
 int					perr(char *str);

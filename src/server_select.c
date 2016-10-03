@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 12:00:15 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/30 13:43:37 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/10/03 15:18:40 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	server_set(int sock)
 {
+	server()->buf[sock].nick = ft_strdup("Anon");
 	server()->buf[sock].read = strfresh(server()->buf[sock].read);
 	server()->buf[sock].write = strfresh(server()->buf[sock].write);
 	server()->buf[sock].set = 1;
@@ -26,18 +27,17 @@ void	server_clr(int sock)
 {
 	int	i;
 
-	server()->buf[sock].read = strfresh(server()->buf[sock].read);
-	server()->buf[sock].write = strfresh(server()->buf[sock].write);
+	printf("Server: disconnecting from socket %d\n", sock);
+	free(server()->buf[sock].nick);
 	server()->buf[sock].set = 0;
 	FD_CLR(sock, SERVER_ACTIVE);
 	if (sock == server()->max)
 	{
-		i = 0;
-		while (i >= 0)
+		i = sock;
+		while (--i >= 0)
 		{
 			if (server()->buf[i].set == 1)
 				break ;
-			--i;
 		}
 		server()->max = i;
 	}
@@ -49,25 +49,40 @@ void	server_accept(void)
 	t_sockaddr_in	addr;
 	socklen_t		size;
 
-	if (!FD_ISSET(server()->listen, SERVER_READ))
-		return ;
-	size = sizeof(t_sockaddr_in);
-	new_sock = accept(server()->listen, &addr, &size);
-	printf("Server: connection from host %s, port %hd.\n",
-		inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
-	server_set(new_sock);
+	if (FD_ISSET(server()->listen, SERVER_READ))
+	{
+		size = sizeof(t_sockaddr_in);
+		new_sock = accept(server()->listen, (void*)&addr, &size);
+		printf("Server: connection from host %s, port %hd: Socket %d\n",
+			inet_ntoa(addr.sin_addr), ntohs(addr.sin_port), new_sock);
+		server_set(new_sock);
+	}
+}
+
+void	read_out(int sock, char *buf)
+{
+	ft_putstr("Reading from socket ");
+	ft_putnbr(sock);
+	ft_putstr(": \"");
+	ft_putstr(buf);
+	ft_putstr("\"\n");
 }
 
 void	server_read(int sock)
 {
 	char	buf[BUF_SIZE + 1];
 	int		ret;
+	char	*tmp;
 
-	ret = recv(sock, buf, BUF_SIZE);
+	ret = recv(sock, buf, BUF_SIZE, 0);
 	if (ret < 1)
 		return (server_clr(sock));
 	buf[ret] = 0;
-	strjoinfree(server()->buf[sock].read, buf);
+	read_out(sock, buf);
+	tmp = server()->buf[sock].read;
+	server()->buf[sock].read = ft_strjoin(tmp, buf);
+	free(tmp);
+	ft_putstr("After\n");
 }
 
 void	server_select(void)
@@ -87,9 +102,9 @@ void	server_select(void)
 	i = 0;
 	while (i <= server()->max)
 	{
-		if (i != server()->listen && FD_ISSET(i, SERVER_READ))
+		if (server()->buf[i].set == 1 && FD_ISSET(i, SERVER_READ))
 			server_read(i);
-		if (i != server()->listen && FD_ISSET(i, SERVER_WRITE))
+		if (server()->buf[i].set == 1 && FD_ISSET(i, SERVER_WRITE))
 		{
 			send(i, server()->buf[i].write, strlen(server()->buf[i].write), 0);
 			server()->buf[i].write = strfresh(server()->buf[i].write);

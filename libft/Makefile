@@ -6,7 +6,7 @@
 #    By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/09/09 10:54:05 by tgauvrit          #+#    #+#              #
-#    Updated: 2015/02/09 15:43:20 by tgauvrit         ###   ########.fr        #
+#    Updated: 2016/10/03 14:50:16 by tgauvrit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ FT_LIB_NAME =	ft
 
 FT_LIB =		lib$(FT_LIB_NAME).a
 
-CC =			gcc
+CC =			gcc -g
 
 FLAGS =			-Wall -Werror -Wextra -O3
 
