@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 13:26:26 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/10/03 13:44:17 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/01 18:03:41 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	server_init(int sock)
 	printf("FD Limit: %d\n", fd_limit());
 	while (i < fd_limit())
 	{
+		server()->buf[i].nick = ft_strnew(9);
 		server()->buf[i].read = ft_strnew(0);
 		server()->buf[i].write = ft_strnew(0);
 		server()->buf[i].set = 0;

@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/14 13:37:09 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/10/03 15:16:31 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/01 17:53:40 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	server_do(t_clientbuf *client)
 		// else
 		// 	channels_write(client);
 		client->write = strjoinfree(client->write, client->read);
+		client->write = strjoinfree(client->write, "\n");
 		*tmp = '\n';
 		client->read = strcutline(client->read);
 	}

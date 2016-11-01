@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 12:00:15 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/10/03 15:18:40 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/01 18:09:46 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	server_set(int sock)
 {
-	server()->buf[sock].nick = ft_strdup("Anon");
+	ft_strcpy(server()->buf[sock].nick, "Anon");
 	server()->buf[sock].read = strfresh(server()->buf[sock].read);
 	server()->buf[sock].write = strfresh(server()->buf[sock].write);
 	server()->buf[sock].set = 1;
@@ -28,7 +28,7 @@ void	server_clr(int sock)
 	int	i;
 
 	printf("Server: disconnecting from socket %d\n", sock);
-	free(server()->buf[sock].nick);
+	ft_bzero(server()->buf[sock].nick, 10);
 	server()->buf[sock].set = 0;
 	FD_CLR(sock, SERVER_ACTIVE);
 	if (sock == server()->max)

@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/03 15:35:45 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/10/03 13:04:06 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/10/04 18:25:09 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ typedef struct		s_clientbuf
 	char			*write;
 }					t_clientbuf;
 
+typedef struct		s_channel
+{
+	char			*name;
+	int				*sockets;
+}					t_channel;
+
 typedef struct		s_server
 {
 	fd_set			active;
@@ -63,6 +69,7 @@ typedef struct		s_server
 	int				listen;
 	int				max;
 	t_clientbuf		*buf;
+	t_channel		*ch;
 }					t_server;
 
 t_server			*server(void);
