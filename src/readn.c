@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/29 12:11:47 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/30 10:42:06 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/02 17:56:59 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,6 @@ static char		*strupgrade(char *str, size_t buffer)
 	return (new);
 }
 
-static char		*strdump(char **str, int fd)
-{
-	char	*tmp;
-
-	tmp = *str;
-	if (tmp == NULL)
-		tmp = ft_strnew(0);
-	if (fd < -1)
-		*str = ft_strnew(0);
-	return (tmp);
-}
-
 char			*readn(int fd)
 {
 	static char	*buf = NULL;
@@ -69,16 +57,18 @@ char			*readn(int fd)
 	int			offset;
 
 	if (fd < 0)
-		return (strdump(&buf, fd));
+		return (buf);
 	buf = strupgrade(buf, BUF_SIZE);
 	offset = 0;
 	while ((ret = read(fd, buf + offset, BUF_SIZE)) > 0)
 	{
+		offset += ret;
+		buf[offset] = 0;
 		if (ft_strchr(buf, '\n') != NULL)
 			break ;
 		buf = strupgrade(buf, BUF_SIZE);
-		offset += ret;
 	}
+	buf[offset + ret] = 0;
 	tmp = buf;
 	if ((buf = ft_strchr(buf, '\n')) == NULL)
 		buf = ft_strnew(0);

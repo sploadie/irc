@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/29 11:36:21 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/29 17:40:18 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/02 18:08:06 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ static char			*read_prompt(void)
 	char	*input;
 
 	print_prompt();
-	ft_putstr(readn(-1));
+	input = readn(-1);
+	if (input != NULL)
+		ft_putstr(input);
 	input = readn(0);
-	if (*(input + ft_strlen(input) - 1) != '\n')
+	if (ft_strlen(input) == 0 || input[ft_strlen(input) - 1] != '\n')
 		write(1, "\n", 1);
 	return (input);
 }
