@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/29 11:41:19 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/09/30 12:15:28 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/02 14:28:55 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,16 @@ char	*strjoinfree(char *s1, char *s2)
 {
 	char	*new;
 	char 	*tmp;
+	char 	*s1_ptr;
 
 	new = palloc((strlen(s1) + strlen(s2) + 1) * sizeof(char));
 	tmp = new;
-	while (*s1 != 0)
+	s1_ptr = s1;
+	while (*s1_ptr != 0)
 	{
-		*tmp = *s1;
+		*tmp = *s1_ptr;
 		++tmp;
-		++s1;
+		++s1_ptr;
 	}
 	while (*s2 != 0)
 	{

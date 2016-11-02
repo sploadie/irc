@@ -6,43 +6,138 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/01 17:46:20 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/01 18:10:43 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/02 15:46:43 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.h"
 
-void	server_cmd_nick(t_clientbuf *client)
+static void	server_cmd_nick(t_clientbuf *client)
 {
-	if (ft_strlen(client->read) == 6)
-		ft_strncpy(client->nick, "Anon", 9);
-	else
-		ft_strncpy(client->nick, client->read + 6, 9);
+	char		*tmp;
+	int			i;
+	t_clientbuf	*clients;
 
+	if (client->read[5] != ' ' && client->read[5] != '\0')
+	{
+		client->write = strjoinfree(client->write, "Error: Unknown command\n");
+		return ;
+	}
+	tmp = ft_strrchr(client->read, ' ');
+	if (tmp == NULL || tmp[1] == '\0')
+		return ((void)ft_strncpy(client->nick, "Anon", 9));
+	tmp = ft_strncpy(client->nick, tmp + 1, 9);
+	while (*tmp != '\0')
+	{
+		if (*tmp == '\n')
+			*tmp = 'n';
+		tmp++;
+	}
+	clients = server()->buf;
+	i = 0;
+	while (i <= server()->max)
+	{
+		if (ft_strcmp(clients[i].nick, client->nick) == 0 && i != client->sock)
+		{
+			client->write = strjoinfree(client->write, "Error: Nick taken\n");
+			ft_strncpy(client->nick, "Anon", 9);
+			return ;
+		}
+		++i;
+	}
+	client->write = strjoinfree(client->write, "Notice: Nick changed\n");
 }
 
-void	server_cmd_join(t_clientbuf *client)
+static void	server_cmd_join(t_clientbuf *cl)
 {
-	;
+	int	i;
+	t_clientbuf	*cs;
+
+	if (cl->read[5] != ' ' && cl->read[5] != '\0')
+	{
+		cl->write = strjoinfree(cl->write, "Error: Unknown command\n");
+		return ;
+	}
+	if (cl->read[5] == '\0' || ft_strlen(ft_strrchr(cl->read, ' ') + 1) == 0)
+	{
+		if (cl->channel == 0)
+			return ;
+		cl->write = strjoinfree(cl->write, "Notice: Leaving channel <");
+		cl->write = strjoinfree(cl->write, channel_name(cl->channel));
+		cl->write = strjoinfree(cl->write, ">\n");
+		cl->channel = 0;
+		return ;
+	}
+	cl->channel = channel_get(ft_strrchr(cl->read, ' ') + 1);
+	cs = server()->buf;
+	i = -1;
+	while (++i <= server()->max)
+		if (cs[i].channel == cl->channel)
+		{
+			cs[i].write = strjoinfree(cs[i].write, "Notice: New user joined <");
+			cs[i].write = strjoinfree(cs[i].write, channel_name(cl->channel));
+			cs[i].write = strjoinfree(cs[i].write, ">\n");
+		}
 }
 
-void	server_cmd_who(t_clientbuf *client)
+static void	server_cmd_who(t_clientbuf *client)
 {
-	;
+	int	i;
+	t_clientbuf	*clients;
+
+	if (client->channel == 0)
+	{
+		client->write = strjoinfree(client->write, "Notice: In Lobby\n");
+		return ;
+	}
+	client->write = strjoinfree(client->write, "Channel <");
+	client->write = strjoinfree(client->write, channel_name(client->channel));
+	client->write = strjoinfree(client->write, "> Members\n");
+	clients = server()->buf;
+	i = 0;
+	while (i <= server()->max)
+	{
+		if (clients[i].channel == client->channel)
+		{
+			client->write = strjoinfree(client->write, clients[i].nick);
+			client->write = strjoinfree(client->write, "\n");
+		}
+		++i;
+	}
 }
 
-void	server_cmd_msg(t_clientbuf *client)
+static void	server_cmd_msg(t_clientbuf *client)
 {
-	;
+	int			i;
+	size_t		len;
+	t_clientbuf	*clients;
+	char		*tmp;
+
+	tmp = client->read + 5;
+	clients = server()->buf;
+	i = 0;
+	while (i <= server()->max)
+	{
+		len = ft_strlen(clients[i].nick);
+		if (ft_strncmp(tmp, clients[i].nick, len) == 0 && tmp[len] == ' ')
+		{
+			client->read += 5 + len + 1;
+			clients[i].write = write_msg(clients[i].write, client);
+			client->read -= 5 + len + 1;
+			return ;
+		}
+		++i;
+	}
+	client->write = strjoinfree(client->write, "Error: Nick not found\n");
 }
 
-void	server_cmd(t_clientbuf *client)
+void		server_cmd(t_clientbuf *client)
 {
-	if (ft_strncmp(client->read, "/nick ", 6) == 0)
+	if (ft_strncmp(client->read, "/nick", 5) == 0)
 		server_cmd_nick(client);
-	else if (ft_strncmp(client->read, "/join ", 6) == 0)
+	else if (ft_strncmp(client->read, "/join", 5) == 0)
 		server_cmd_join(client);
-	else if (ft_strncmp(client->read, "/who ", 5) == 0)
+	else if (ft_strncmp(client->read, "/who", 5) == 0)
 		server_cmd_who(client);
 	else if (ft_strncmp(client->read, "/msg ", 5) == 0)
 		server_cmd_msg(client);

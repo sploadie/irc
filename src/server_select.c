@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 12:00:15 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/01 18:09:46 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/02 15:11:47 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	server_set(int sock)
 {
-	ft_strcpy(server()->buf[sock].nick, "Anon");
+	server()->buf[sock].set = 1;
+	ft_strncpy(server()->buf[sock].nick, "Anon", 9);
 	server()->buf[sock].read = strfresh(server()->buf[sock].read);
 	server()->buf[sock].write = strfresh(server()->buf[sock].write);
-	server()->buf[sock].set = 1;
+	server()->buf[sock].channel = 0;
 	FD_SET(sock, SERVER_ACTIVE);
 	if (sock > server()->max)
 		server()->max = sock;
@@ -30,6 +31,7 @@ void	server_clr(int sock)
 	printf("Server: disconnecting from socket %d\n", sock);
 	ft_bzero(server()->buf[sock].nick, 10);
 	server()->buf[sock].set = 0;
+	server()->buf[sock].channel = 0;
 	FD_CLR(sock, SERVER_ACTIVE);
 	if (sock == server()->max)
 	{
@@ -82,7 +84,7 @@ void	server_read(int sock)
 	tmp = server()->buf[sock].read;
 	server()->buf[sock].read = ft_strjoin(tmp, buf);
 	free(tmp);
-	ft_putstr("After\n");
+	// ft_putstr("After\n");
 }
 
 void	server_select(void)

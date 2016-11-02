@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/14 13:37:09 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/01 17:53:40 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/02 14:45:47 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void	server_do(t_clientbuf *client)
 		ft_putnbr(client->sock);
 		ft_putstr(": line found.\n");
 		*tmp = 0;
-		// if (client->read[0] == '/')
-		// 	server_cmd(client);
-		// else
-		// 	channels_write(client);
-		client->write = strjoinfree(client->write, client->read);
-		client->write = strjoinfree(client->write, "\n");
+		if (client->read == tmp)
+			*tmp = '@';
+		else if (client->read[0] == '/')
+			server_cmd(client);
+		else
+			channels_write(client);
 		*tmp = '\n';
 		client->read = strcutline(client->read);
 	}
