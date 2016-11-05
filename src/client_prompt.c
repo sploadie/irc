@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/29 11:36:21 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/05 14:36:32 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/05 17:13:09 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void				client_prompt(void)
 		client_select();
 		if (ft_strlen(client()->sv_read) != 0)
 		{
+			ft_putstr("\r\033[2K\x1b[0m");
 			ft_putstr(client()->sv_read);
 			client()->sv_read = strfresh(client()->sv_read);
 			print_prompt();
