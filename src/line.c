@@ -1,20 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client_send.c                                      :+:      :+:    :+:   */
+/*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/09/29 17:20:51 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/02 18:07:01 by tgauvrit         ###   ########.fr       */
+/*   Created: 2016/11/04 16:24:42 by tgauvrit          #+#    #+#             */
+/*   Updated: 2016/11/04 16:50:23 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.h"
 
-void	client_send(t_sock_data *sock, char *input)
+char	*linedup(char *str)
 {
-	send(sock->id, input, ft_strlen(input), 0);
-	(void)sock;
-	ft_putendl(input);
+	char	*tmp;
+
+	if ((tmp = ft_strchr(str, '\n')) == NULL)
+		return (ft_strnew(0));
+	*tmp = 0;
+	str = ft_strdup(str);
+	str = strjoinfree(str, "\n");
+	*tmp = '\n';
+	return (str);
+}
+
+char	*linepop(char *str)
+{
+	char	*tmp;
+
+	if ((tmp = ft_strchr(str, '\n')) == NULL)
+		return (str);
+	tmp = ft_strdup(tmp + 1);
+	free(str);
+	return (tmp);
 }
