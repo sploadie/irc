@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 13:26:26 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/02 15:08:57 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/06 20:58:54 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_server	*server(void)
 	return (&save);
 }
 
-void	server_init(int sock)
+void		server_init(int sock)
 {
 	int	i;
 

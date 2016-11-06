@@ -6,7 +6,7 @@
 #    By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/20 16:35:37 by tgauvrit          #+#    #+#              #
-#    Updated: 2016/11/05 14:02:34 by tgauvrit         ###   ########.fr        #
+#    Updated: 2016/11/06 21:14:24 by tgauvrit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ OBJ_DIR_NAME =	obj
 OBJ_DIR =		./obj/
 
 SHARED_FILES =	print get_dir strjoinfree line palloc fd_limit
-FILENAMES1 :=	server_main server_select server_init server_cmd channel
+FILENAMES1 :=	server_main server_select server_init server_cmd channel read_out
 FILENAMES2 :=	client_main client_connect client_prompt client_select client_init
 
 OBJ_PATHS1 :=	$(addsuffix .o,$(SHARED_FILES) $(FILENAMES1))

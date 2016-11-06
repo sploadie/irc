@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 12:00:15 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/02 15:11:47 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/06 21:14:41 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,6 @@ void	server_accept(void)
 	}
 }
 
-void	read_out(int sock, char *buf)
-{
-	ft_putstr("Reading from socket ");
-	ft_putnbr(sock);
-	ft_putstr(": \"");
-	ft_putstr(buf);
-	ft_putstr("\"\n");
-}
-
 void	server_read(int sock)
 {
 	char	buf[BUF_SIZE + 1];
@@ -84,7 +75,6 @@ void	server_read(int sock)
 	tmp = server()->buf[sock].read;
 	server()->buf[sock].read = ft_strjoin(tmp, buf);
 	free(tmp);
-	// ft_putstr("After\n");
 }
 
 void	server_select(void)

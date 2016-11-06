@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/03 22:09:53 by tgauvrit          #+#    #+#             */
-/*   Updated: 2014/11/08 19:26:04 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/06 18:57:15 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	*ft_strncat(char *dest, char *src, int nb)
 	while (i < nb)
 	{
 		end_dest[i++] = '\0';
-		i++;
 	}
 	end_dest[i] = '\0';
 	return (dest);

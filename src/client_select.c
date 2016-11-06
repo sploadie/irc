@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 16:17:30 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/05 14:21:14 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/06 20:57:13 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,9 @@ void	client_select(void)
 	if (ret < 0)
 		return ((void)perr("Select encountered an error.\n"));
 	if (FD_ISSET(0, CLIENT_READ))
-		client()->cl_read  = client_read(0, client()->cl_read);
-	// if (FD_ISSET(1, CLIENT_WRITE))
-	// 	client()->cl_write = client_write(1, client()->cl_write);
+		client()->cl_read = client_read(0, client()->cl_read);
 	if (FD_ISSET(client()->fd, CLIENT_READ) && client()->fd > 0)
-		client()->sv_read  = client_read(client()->fd, client()->sv_read);
+		client()->sv_read = client_read(client()->fd, client()->sv_read);
 	if (FD_ISSET(client()->fd, CLIENT_WRITE) && client()->fd > 0)
 		client()->sv_write = client_write(client()->fd, client()->sv_write);
 }
-

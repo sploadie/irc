@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/02 10:46:33 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/02 15:11:02 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/06 20:56:41 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*write_msg(char *dest, t_clientbuf *client)
 
 void	channels_write(t_clientbuf *client)
 {
-	int	i;
+	int			i;
 	t_clientbuf	*clients;
 
 	client->write = write_msg(client->write, client);

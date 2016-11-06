@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/03 15:35:45 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/05 14:03:45 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/06 21:14:07 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void						server_set(int sock);
 void						server_select(void);
 void						server_accept(void);
 void						server_cmd(t_clientbuf *client);
+
+void						read_out(int sock, char *buf);
 
 char						*write_msg(char *dest, t_clientbuf *client);
 int							channel_get(char *name);

@@ -1,45 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strjoinfree.c                                      :+:      :+:    :+:   */
+/*   read_out.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/09/29 11:41:19 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/06 21:11:05 by tgauvrit         ###   ########.fr       */
+/*   Created: 2016/11/06 21:12:36 by tgauvrit          #+#    #+#             */
+/*   Updated: 2016/11/06 21:13:02 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.h"
 
-char	*strfresh(char *str)
+void	read_out(int sock, char *buf)
 {
-	free(str);
-	return (ft_strnew(0));
-}
-
-char	*strjoinfree(char *s1, char *s2)
-{
-	char	*new;
-	char	*tmp;
-	char	*s1_ptr;
-
-	new = palloc((strlen(s1) + strlen(s2) + 1) * sizeof(char));
-	tmp = new;
-	s1_ptr = s1;
-	while (*s1_ptr != 0)
-	{
-		*tmp = *s1_ptr;
-		++tmp;
-		++s1_ptr;
-	}
-	while (*s2 != 0)
-	{
-		*tmp = *s2;
-		++tmp;
-		++s2;
-	}
-	*tmp = 0;
-	free(s1);
-	return (new);
+	ft_putstr("Reading from socket ");
+	ft_putnbr(sock);
+	ft_putstr(": \"");
+	ft_putstr(buf);
+	ft_putstr("\"\n");
 }
