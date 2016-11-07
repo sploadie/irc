@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/05 14:02:20 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/06 20:56:17 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/07 13:47:24 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void		client_reset(int fd)
 	FD_SET(0, CLIENT_ACTIVE);
 	FD_SET(1, CLIENT_ACTIVE);
 	FD_SET(fd, CLIENT_ACTIVE);
-	client()->cl_read = strfresh(client()->cl_read);
 	client()->cl_write = strfresh(client()->cl_write);
 	client()->sv_read = strfresh(client()->sv_read);
 	client()->sv_write = strfresh(client()->sv_write);
