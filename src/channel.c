@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/02 10:46:33 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/06 20:56:41 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/07 13:12:56 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,13 @@ char	*channel_name(int id)
 	return (ch->name);
 }
 
-char	*write_msg(char *dest, t_clientbuf *client)
+void	write_msg(char *dest, char *nick, char *msg)
 {
-	dest = strjoinfree(dest, "<");
-	dest = strjoinfree(dest, client->nick);
-	dest = strjoinfree(dest, "> ");
-	dest = strjoinfree(dest, client->read);
-	dest = strjoinfree(dest, "\n");
-	return (dest);
+	ft_strlcat(dest, "<", BUF_SIZE);
+	ft_strlcat(dest, nick, BUF_SIZE);
+	ft_strlcat(dest, "> ", BUF_SIZE);
+	ft_strlcat(dest, msg, BUF_SIZE);
+	ft_strlcat(dest, "\n", BUF_SIZE);
 }
 
 void	channels_write(t_clientbuf *client)
@@ -59,7 +58,7 @@ void	channels_write(t_clientbuf *client)
 	int			i;
 	t_clientbuf	*clients;
 
-	client->write = write_msg(client->write, client);
+	write_msg(client->write, client->nick, client->read);
 	if (client->channel == 0)
 		return ;
 	clients = server()->buf;
@@ -67,7 +66,7 @@ void	channels_write(t_clientbuf *client)
 	while (i <= server()->max)
 	{
 		if (clients[i].channel == client->channel && i != client->sock)
-			clients[i].write = write_msg(clients[i].write, client);
+			write_msg(clients[i].write, client->nick, client->read);
 		++i;
 	}
 }

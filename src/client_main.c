@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 14:49:40 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/05 14:05:49 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/07 13:33:04 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int			main(int argc, char *argv[])
 	}
 	ft_putstr("Client connected to server\n");
 	client_reset(sock->id);
+	print_prompt(NULL);
 	client_prompt();
 	free(sock);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/03 15:35:45 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/06 21:14:07 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/07 13:33:29 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ typedef struct				s_clientbuf
 	int						set;
 	int						sock;
 	char					*nick;
-	char					*read;
-	char					*write;
+	char					read[BUF_SIZE + 1];
+	char					write[BUF_SIZE + 1];
 	int						channel;
 }							t_clientbuf;
 
@@ -98,7 +98,7 @@ void						server_cmd(t_clientbuf *client);
 
 void						read_out(int sock, char *buf);
 
-char						*write_msg(char *dest, t_clientbuf *client);
+void						write_msg(char *dest, char *nick, char *msg);
 int							channel_get(char *name);
 char						*channel_name(int id);
 void						channels_write(t_clientbuf *client);
@@ -121,6 +121,7 @@ void						client_init(int fd);
 void						client_reset(int fd);
 void						client_select(void);
 
+void						print_prompt(char *str);
 void						client_prompt(void);
 t_sock_data					*prompt_connect_only(void);
 t_sock_data					*c_connect(char *hostname, char *port);

@@ -6,13 +6,13 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/29 11:36:21 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/06 21:26:35 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/07 13:34:14 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.h"
 
-static void			print_prompt(char *str)
+void				print_prompt(char *str)
 {
 	if (str != NULL)
 		ft_putstr(str);
@@ -40,7 +40,6 @@ void				client_prompt(void)
 {
 	char		*tmp;
 
-	print_prompt(NULL);
 	while (42)
 	{
 		client_select();
@@ -55,6 +54,7 @@ void				client_prompt(void)
 		if (ft_strncmp(client()->cl_read, "/connect ", 9) == 0)
 		{
 			prompt_connect_only();
+			print_prompt(NULL);
 			continue ;
 		}
 		tmp = linedup(client()->cl_read);

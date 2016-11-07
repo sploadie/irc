@@ -6,23 +6,11 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/14 13:37:09 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/03 18:02:17 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/07 12:51:26 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.h"
-
-char	*strcutline(char *str)
-{
-	char	*tmp;
-
-	tmp = ft_strchr(str, '\n');
-	if (tmp == NULL)
-		return (str);
-	tmp = ft_strdup(tmp + 1);
-	free(str);
-	return (tmp);
-}
 
 void	server_do(t_clientbuf *client)
 {
@@ -40,8 +28,7 @@ void	server_do(t_clientbuf *client)
 			server_cmd(client);
 		else
 			channels_write(client);
-		*tmp = '\n';
-		client->read = strcutline(client->read);
+		ft_strcpy(client->read, tmp + 1);
 	}
 }
 

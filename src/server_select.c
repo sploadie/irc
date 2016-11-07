@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 12:00:15 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/06 21:14:41 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/07 12:44:49 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	server_set(int sock)
 {
 	server()->buf[sock].set = 1;
 	ft_strncpy(server()->buf[sock].nick, "Anon", 9);
-	server()->buf[sock].read = strfresh(server()->buf[sock].read);
-	server()->buf[sock].write = strfresh(server()->buf[sock].write);
+	server()->buf[sock].read[0] = 0;
+	server()->buf[sock].write[0] = 0;
 	server()->buf[sock].channel = 0;
 	FD_SET(sock, SERVER_ACTIVE);
 	if (sock > server()->max)
@@ -63,18 +63,17 @@ void	server_accept(void)
 
 void	server_read(int sock)
 {
-	char	buf[BUF_SIZE + 1];
+	char	*buf;
 	int		ret;
-	char	*tmp;
 
-	ret = recv(sock, buf, BUF_SIZE, 0);
+	ret = ft_strlen(server()->buf[sock].read);
+	buf = server()->buf[sock].read + ret;
+	ret = recv(sock, buf, BUF_SIZE - ret, 0);
+	if (ret >= 0)
+		buf[ret] = 0;
 	if (ret < 1)
 		return (server_clr(sock));
-	buf[ret] = 0;
 	read_out(sock, buf);
-	tmp = server()->buf[sock].read;
-	server()->buf[sock].read = ft_strjoin(tmp, buf);
-	free(tmp);
 }
 
 void	server_select(void)
@@ -99,7 +98,7 @@ void	server_select(void)
 		if (server()->buf[i].set == 1 && FD_ISSET(i, SERVER_WRITE))
 		{
 			send(i, server()->buf[i].write, strlen(server()->buf[i].write), 0);
-			server()->buf[i].write = strfresh(server()->buf[i].write);
+			server()->buf[i].write[0] = 0;
 		}
 		++i;
 	}

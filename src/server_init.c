@@ -6,7 +6,7 @@
 /*   By: tgauvrit <tgauvrit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/30 13:26:26 by tgauvrit          #+#    #+#             */
-/*   Updated: 2016/11/06 20:58:54 by tgauvrit         ###   ########.fr       */
+/*   Updated: 2016/11/07 12:46:09 by tgauvrit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void		server_init(int sock)
 	while (i < fd_limit())
 	{
 		server()->buf[i].nick = ft_strnew(9);
-		server()->buf[i].read = ft_strnew(0);
-		server()->buf[i].write = ft_strnew(0);
+		server()->buf[i].read[0] = 0;
+		server()->buf[i].write[0] = 0;
 		server()->buf[i].set = 0;
 		server()->buf[i].sock = i;
 		server()->buf[i].channel = 0;
